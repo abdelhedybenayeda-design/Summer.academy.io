@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOMYCODE - Summer Academy Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .gomycode-red {
+            color: #FE4A49;
+        }
+        .bg-gomycode-red {
+            background-color: #FE4A49;
+        }
+        .border-gomycode-red {
+            border-color: #FE4A49;
+        }
+        .hover-gomycode-red:hover {
+            background-color: #E03D3C;
+        }
+        .slide-container {
+            aspect-ratio: 16 / 9;
+        }
+        /* Masquer la scrollbar pour une présentation épurée */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Style d'impression pour la fiche d'inscription */
+        @media print {
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-card {
+                border: 1px solid #ddd !important;
+                box-shadow: none !important;
+                background: white !important;
+                color: black !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Toast Notification (Alternative à alert) -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <!-- Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-40 px-6 py-4 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-gomycode-red text-white px-3 py-1.5 rounded-lg font-black text-xl tracking-wider shadow-lg shadow-red-500/10">
+                    GOMYCODE
+                </div>
+                <div class="h-6 w-[2px] bg-slate-700 hidden lg:block"></div>
+                <span class="text-xs font-bold tracking-widest text-slate-400 uppercase">Summer Academy 2026 — Portails Parents & Étudiants</span>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                <button onclick="switchView('overview')" id="nav-overview" class="px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all bg-gomycode-red text-white shadow-md">
+                    <i class="fa-solid fa-grid-horizontal mr-1.5"></i>Vue d'ensemble
+                </button>
+                <button onclick="switchView('slides')" id="nav-slides" class="px-4 py-2 rounded-full text-xs md:text-sm font-semibold text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-presentation-screen mr-1.5"></i>Mode Présentation
+                </button>
+                <button onclick="switchView('quiz')" id="nav-quiz" class="px-4 py-2 rounded-full text-xs md:text-sm font-semibold text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>Trouver mon Parcours
+                </button>
+                <button onclick="switchView('compare')" id="nav-compare" class="px-4 py-2 rounded-full text-xs md:text-sm font-semibold text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-code-compare mr-1.5"></i>Comparateur
+                </button>
+                <button onclick="switchView('invoice')" id="nav-invoice" class="px-4 py-2 rounded-full text-xs md:text-sm font-semibold text-slate-300 hover:text-white transition-all">
+                    <i class="fa-solid fa-file-invoice mr-1.5"></i>Fiche d'Inscription
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- SECTION 1: VUE D'ENSEMBLE -->
+        <section id="view-overview" class="space-y-8 animate-fade-in no-print">
+            <!-- Hero banner d'accueil -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-6 md:p-10 flex flex-col lg:flex-row justify-between items-center gap-8 shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-80 h-80 bg-red-500/10 rounded-full blur-3xl"></div>
+                <div class="space-y-4 relative z-10">
+                    <span class="bg-red-500/10 text-red-400 border border-red-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                        Le Camp d'Été d'une Vie
+                    </span>
+                    <h1 class="text-3xl md:text-5xl font-black text-white leading-tight">
+                        Faites de leur été <br><span class="text-red-500">une aventure tech</span>
+                    </h1>
+                    <p class="text-slate-400 max-w-xl text-sm md:text-base">
+                        Découvrez nos 9 programmes de formation intensive de <strong>3 semaines (48h)</strong> conçus pour les jeunes passionnés du digital. Un prix unique de <strong>600 TND</strong> avec accès complet à nos Hackerspaces.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="switchView('slides')" class="bg-gomycode-red hover-gomycode-red text-white px-5 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-red-500/20 transition-all transform hover:-translate-y-0.5 text-sm">
+                            <i class="fa-solid fa-play"></i> Lancer la présentation
+                        </button>
+                        <button onclick="switchView('quiz')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-5 py-3 rounded-xl font-semibold flex items-center gap-2 border border-slate-700 transition-all text-sm">
+                            <i class="fa-solid fa-graduation-cap"></i> Quel cours choisir ? (Quiz)
+                        </button>
+                    </div>
+                </div>
+                <div class="lg:w-5/12 grid grid-cols-2 gap-4 relative z-10 w-full">
+                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between">
+                        <i class="fa-solid fa-clock text-red-500 text-2xl mb-2"></i>
+                        <div>
+                            <span class="text-slate-400 text-xs block">Format de cours</span>
+                            <span class="font-extrabold text-white text-sm">3 sem. (48 Heures)</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between">
+                        <i class="fa-solid fa-wallet text-red-500 text-2xl mb-2"></i>
+                        <div>
+                            <span class="text-slate-400 text-xs block">Tarif unique</span>
+                            <span class="font-extrabold text-white text-sm">600 TND / Session</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between">
+                        <i class="fa-solid fa-user-graduate text-red-500 text-2xl mb-2"></i>
+                        <div>
+                            <span class="text-slate-400 text-xs block">Public</span>
+                            <span class="font-extrabold text-white text-sm">Enfants et Ados</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between">
+                        <i class="fa-solid fa-certificate text-red-500 text-2xl mb-2"></i>
+                        <div>
+                            <span class="text-slate-400 text-xs block">Reconnaissance</span>
+                            <span class="font-extrabold text-white text-sm">Certification GMC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtres de catégorie -->
+            <div class="flex flex-wrap gap-2 pb-2">
+                <button onclick="filterCourses('all')" class="category-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all bg-gomycode-red text-white" id="filter-all">Toutes les formations</button>
+                <button onclick="filterCourses('ai')" class="category-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" id="filter-ai">Intelligence Artificielle</button>
+                <button onclick="filterCourses('code')" class="category-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" id="filter-code">Développement & Code</button>
+                <button onclick="filterCourses('creative')" class="category-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700" id="filter-creative">Créatif & Marketing</button>
+            </div>
+
+            <!-- Liste des cartes de cours -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="courses-grid">
+                <!-- Rempli dynamiquement -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: MODE SLIDES (POWERPOINT INTÉGRÉ) -->
+        <section id="view-slides" class="hidden space-y-6 no-print">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-person-chalkboard text-red-500 mr-2"></i>Présentateur Interactif de la Summer Academy</h2>
+                    <p class="text-slate-400 text-xs md:text-sm">Parfait pour projeter en Hackerspace ou guider des parents d'élèves.</p>
+                </div>
+                <!-- Sélecteur de slide directe -->
+                <div class="flex flex-wrap gap-2 items-center w-full lg:w-auto">
+                    <span class="text-xs text-slate-400 font-semibold">Aller à :</span>
+                    <select id="slide-course-selector" onchange="jumpToSlide(this.value)" class="bg-slate-800 text-slate-200 border border-slate-700 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <!-- Généré en JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Zone de la Slide géante -->
+            <div class="relative bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl overflow-hidden group">
+                <div id="active-slide-content" class="w-full p-6 md:p-10 lg:p-12 flex flex-col justify-between transition-all duration-300 min-h-[500px] slide-container bg-radial-gradient">
+                    <!-- Rempli dynamiquement -->
+                </div>
+
+                <!-- Commandes rapides incrustées sur les côtés -->
+                <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-slate-950/80 hover:bg-red-500 hover:text-white text-slate-400 p-3 rounded-full border border-slate-800 opacity-0 group-hover:opacity-100 transition-all">
+                    <i class="fa-solid fa-chevron-left text-lg"></i>
+                </button>
+                <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-slate-950/80 hover:bg-red-500 hover:text-white text-slate-400 p-3 rounded-full border border-slate-800 opacity-0 group-hover:opacity-100 transition-all">
+                    <i class="fa-solid fa-chevron-right text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Barre de contrôle de la présentation -->
+            <div class="flex flex-col md:flex-row items-center justify-between bg-slate-900 border border-slate-800 px-6 py-4 rounded-2xl gap-4">
+                <span class="text-xs md:text-sm text-slate-400 font-semibold">
+                    Slide <strong class="text-white text-lg" id="current-slide-index">1</strong> sur <span id="total-slides-count">20</span>
+                </span>
+                <div class="flex gap-2">
+                    <button onclick="prevSlide()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-5 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i>Précédent
+                    </button>
+                    <button onclick="nextSlide()" class="bg-gomycode-red hover-gomycode-red text-white px-6 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all shadow-md">
+                        Suivant <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                    </button>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleFullscreen()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2.5 rounded-xl border border-slate-700" title="Plein Écran">
+                        <i class="fa-solid fa-expand text-sm"></i>
+                    </button>
+                    <span class="text-slate-500 text-xs hidden md:inline">Astuce : Utilisez les flèches ← et → de votre clavier</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: QUIZ D'ORIENTATION -->
+        <section id="view-quiz" class="hidden space-y-6 no-print">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-wand-magic-sparkles text-red-500 mr-2"></i>Trouvez votre Parcours Idéal</h2>
+                <p class="text-slate-400 text-xs md:text-sm">Répondez à quelques questions rapides pour identifier les formations les plus adaptées au profil de l'élève.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-10 max-w-3xl mx-auto shadow-xl" id="quiz-card">
+                <!-- Contenu dynamique du Quiz -->
+            </div>
+        </section>
+
+        <!-- SECTION 4: COMPARATEUR -->
+        <section id="view-compare" class="hidden space-y-6 no-print">
+            <div class="border-b border-slate-800 pb-4">
+                <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-code-compare text-red-500 mr-2"></i>Comparateur Côte-à-Côte</h2>
+                <p class="text-slate-400 text-xs md:text-sm">Idéal pour comparer précisément deux ou trois programmes.</p>
+            </div>
+
+            <!-- Choix des cours à comparer -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1.5">Formation Principale</label>
+                    <select id="compare-1" onchange="renderComparison()" class="w-full bg-slate-850 border border-slate-750 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1.5">Formation 2</label>
+                    <select id="compare-2" onchange="renderComparison()" class="w-full bg-slate-850 border border-slate-750 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1.5">Formation 3 (Optionnelle)</label>
+                    <select id="compare-3" onchange="renderComparison()" class="w-full bg-slate-850 border border-slate-750 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <option value="">-- Aucun --</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grille de comparaison -->
+            <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900">
+                <table class="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="border-b border-slate-800 bg-slate-950/50" id="compare-headers">
+                            <!-- JS -->
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-xs md:text-sm" id="compare-body">
+                        <!-- JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 5: GENERATEUR DE DEVIS / FICHE D'INSCRIPTION -->
+        <section id="view-invoice" class="hidden space-y-6">
+            <div class="border-b border-slate-800 pb-4 no-print">
+                <h2 class="text-2xl font-bold text-white"><i class="fa-solid fa-file-invoice-dollar text-red-500 mr-2"></i>Fiche de Devis & Inscription</h2>
+                <p class="text-slate-400 text-xs md:text-sm">Saisissez les informations de l'élève pour imprimer une fiche de devis / admission Summer Academy ultra-professionnelle.</p>
+            </div>
+
+            <!-- Formulaire de configuration de la fiche -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl gap-4 grid grid-cols-1 md:grid-cols-4 no-print">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Prénom de l'élève</label>
+                    <input type="text" id="invoice-firstname" placeholder="Ex: Fares" oninput="updateInvoice()" class="w-full bg-slate-800 border border-slate-750 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nom de famille</label>
+                    <input type="text" id="invoice-lastname" placeholder="Ex: Trabelsi" oninput="updateInvoice()" class="w-full bg-slate-800 border border-slate-750 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Formation Choisie</label>
+                    <select id="invoice-course-selector" onchange="updateInvoice()" class="w-full bg-slate-800 border border-slate-750 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <!-- JS -->
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="window.print()" class="w-full bg-gomycode-red hover-gomycode-red text-white py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-print"></i> Imprimer / Enregistrer PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- La fiche d'inscription officielle prête à l'impression -->
+            <div id="invoice-printable" class="bg-white text-slate-900 p-8 rounded-2xl shadow-xl max-w-4xl mx-auto print-card border border-slate-200">
+                <!-- Rempli en JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>© 2026 GOMYCODE. Tous droits réservés.</p>
+            <p>Données officielles issues de la Summer Academy de GOMYCODE.</p>
+        </div>
+    </footer>
+
+    <!-- Détail du cours Modal -->
+    <div id="course-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-up">
+            <div class="p-6 border-b border-slate-800 flex justify-between items-center">
+                <h3 id="modal-title" class="text-xl font-bold text-white"></h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-6" id="modal-body">
+                <!-- Rempli dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT PRINCIPAL AVEC TOUTES LES DONNÉES ET LA LOGIQUE -->
+    <script>
+        // Base de données complète et ultra-fidèle aux 9 brochures GOMYCODE PDF
+        const coursesData = [
+            {
+                id: "kids-coding",
+                title: "Programmation pour les Enfants",
+                category: "code",
+                icon: "fa-gamepad",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "On s'occupe de tout, il te suffit d'apporter ton PC !",
+                target: "Enfants (8-13 ans) cherchant à comprendre la pensée informatique.",
+                teaser: "Apprends les bases de Scratch, crée des animations, maîtrise App Inventor et conçois des interfaces de jeux.",
+                techStack: ["Scratch", "App Inventor", "Aseprite", "Pixel Art"],
+                focus: [
+                    "Bases de la programmation et pensée algorithmique",
+                    "Création interactive d'animations et de jeux avec Scratch",
+                    "Développement d'applications mobiles réelles avec App Inventor",
+                    "Utilisation ludique de l'accéléromètre et des capteurs de téléphone"
+                ],
+                weeks: {
+                    week1: {
+                        title: "Introduction & Scratch",
+                        topics: [
+                            "Découverte de l'environnement Scratch en ligne ou de bureau.",
+                            "Utilisation d'Aseprite pour la coordination de personnages graphiques.",
+                            "Apprentissage des fonctions clés et des blocs de mouvements Scratch.",
+                            "Création et gestion des blocs personnalisés.",
+                            "Bases du stylo, variables et opérateurs."
+                        ]
+                    },
+                    week2: {
+                        title: "Jeux Avancés Scratch & App Inventor",
+                        topics: [
+                            "Développement de jeux d'arcade complexes interactifs.",
+                            "Intégration de sons personnalisés et de graphismes animés.",
+                            "Prise en main de l'interface et du designer App Inventor.",
+                            "Gestion de l'interface utilisateur (UI) d'une application.",
+                            "Utilisation des capteurs et création d'une application d'appareil photo."
+                        ]
+                    },
+                    week3: {
+                        title: "Projets Mobiles & Jeux Vidéo",
+                        topics: [
+                            "Développement d'une application de dessin mobile sur App Inventor.",
+                            "Création d'un jeu de tir spatial ou d'évitement d'obstacles.",
+                            "Tests et débogage sur des appareils réels.",
+                            "Présentation finale du projet de jeu devant les camarades."
+                        ]
+                    }
+                }
+            },
+            {
+                id: "cybersecurity",
+                title: "Introduction à la Cybersécurité",
+                category: "code",
+                icon: "fa-shield-halved",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "On s'occupe de tout, il te suffit d'apporter ton PC !",
+                target: "Ados et débutants curieux d'explorer la défense des réseaux.",
+                teaser: "Acquiers les bases de la cybersécurité, de la sécurité réseau, de la détection de menaces et des bonnes pratiques de protection.",
+                techStack: ["Wireshark", "CIA Triad", "Firewalls", "VPN/SSL", "Cryptographie"],
+                focus: [
+                    "Maîtriser les principes fondamentaux de sécurité (Triade CIA)",
+                    "Comprendre le fonctionnement et la topologie des réseaux",
+                    "Détecter, analyser et parer les menaces et vulnérabilités systèmes",
+                    "Mettre en œuvre des protocoles de protection des données"
+                ],
+                weeks: {
+                    week1: {
+                        title: "Les Bases de la Cybersécurité",
+                        topics: [
+                            "Compréhension de la triade CIA (Confidentialité, Intégrité, Disponibilité).",
+                            "Définition des rôles et responsabilités d'un expert en cybersécurité.",
+                            "Maîtrise des topologies réseaux, architectures et protocoles.",
+                            "Introduction aux contrôles de sécurité fondamentaux."
+                        ]
+                    },
+                    week2: {
+                        title: "Menaces & Administration de Sécurité",
+                        topics: [
+                            "Identification des types d'attaques courants (Phishing, malware, ingénierie sociale).",
+                            "Configuration de la sécurité au niveau du système d'exploitation.",
+                            "Implémentation des droits d'accès et stratégies de comptes.",
+                            "Outils de défense, pare-feux et détection d'intrusions."
+                        ]
+                    },
+                    week3: {
+                        title: "Sécurité Réseau Active & Audits",
+                        topics: [
+                            "Protocoles de communication sécurisés (SSL/TLS, HTTPS, VPN).",
+                            "Pratiques d'analyses de failles de sécurité de base.",
+                            "Méthodes de cryptographie et de protection de la vie privée.",
+                            "Simulation d'un audit de sécurité et réponse aux incidents."
+                        ]
+                    }
+                }
+            },
+            {
+                id: "gamedev",
+                title: "Introduction au Développement de Jeux Vidéo",
+                category: "code",
+                icon: "fa-headset",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "On s'occupe de tout, il te suffit d'apporter ton PC !",
+                target: "Passionnés de gaming souhaitant passer de l'autre côté de l'écran.",
+                teaser: "Plonge dans le moteur Unity, maîtrise le langage C# et crée ton propre jeu vidéo en 2D.",
+                techStack: ["Unity Engine", "C# (C-Sharp)", "Physics 2D", "Visual Studio"],
+                focus: [
+                    "Prise en main professionnelle d'Unity Engine",
+                    "Fondamentaux de la programmation orientée objet en C#",
+                    "Gestion de la physique 2D, des collisions et des contrôles joueurs",
+                    "Déploiement et publication de ton propre jeu d'arcade"
+                ],
+                weeks: {
+                    week1: {
+                        title: "Interface Unity & Physique de base",
+                        topics: [
+                            "Familiarisation avec l'interface et les outils d'Unity Engine.",
+                            "Initialisation du premier projet 2D.",
+                            "Maîtrise de la physique 2D (RigidBody, Colliders).",
+                            "Développement du jeu classique Pong.",
+                            "Bases de la programmation C# (variables, fonctions, conditions)."
+                        ]
+                    },
+                    week2: {
+                        title: "Programmation avancée & Mécaniques",
+                        topics: [
+                            "Apprentissage des structures de contrôle avancées en C#.",
+                            "Intégration d'ennemis, de systèmes de points et de barres de vie.",
+                            "Gestion des animations d'objets et des transitions d'états.",
+                            "Création d'interfaces utilisateur (UI) dynamiques (menus, scores)."
+                        ]
+                    },
+                    week3: {
+                        title: "Effets visuels, Audio & Publication",
+                        topics: [
+                            "Ajout d'effets sonores, de musiques d'ambiance et de bruitages.",
+                            "Implémentation de systèmes de particules (explosions, trainées).",
+                            "Optimisation des scripts et correction des bugs.",
+                            "Exportation finale et construction d'une build jouable du jeu."
+                        ]
+                    }
+                }
+            },
+            {
+                id: "genai-newgen",
+                title: "IA Générative pour la Nouvelle Génération",
+                category: "ai",
+                icon: "fa-robot",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "On s'occupe de tout, il te suffit d'apporter ton PC !",
+                target: "Jeunes ados qui veulent comprendre comment fonctionne l'IA dans leur quotidien.",
+                teaser: "Explore les concepts essentiels de l'IA et apprends comment les systèmes intelligents analysent et prédisent le monde réel.",
+                techStack: ["Computer Vision", "Machine Learning", "Audio Analysis", "Prompting"],
+                focus: [
+                    "Bases fondamentales du Machine Learning",
+                    "Traitement d'images et Vision par Ordinateur (Computer Vision)",
+                    "Analyse de l'audio et reconnaissance vocale par l'IA",
+                    "Manipulation pratique d'outils de génération d'images et textes"
+                ],
+                weeks: {
+                    week1: {
+                        title: "Comprendre les bases de l'IA",
+                        topics: [
+                            "Introduction au fonctionnement de l'apprentissage machine.",
+                            "Identification de l'IA dans la vie quotidienne.",
+                            "Initiation à la Vision par Ordinateur (comment l'ordinateur voit).",
+                            "Conversion d'images réelles en données numériques exploitables.",
+                            "Découverte de la reconnaissance et de l'analyse audio."
+                        ]
+                    },
+                    week2: {
+                        title: "Manipulation des Données",
+                        topics: [
+                            "Gestion, nettoyage et structuration des ensembles de données.",
+                            "Exploration des notions de biais algorithmiques.",
+                            "Entraînement de petits modèles de classification simples.",
+                            "Visualisation simple de prédictions et scores de précision."
+                        ]
+                    },
+                    week3: {
+                        title: "Applications Innovantes & Projets",
+                        topics: [
+                            "Création de prompts avancés pour de l'IA générative.",
+                            "Développement d'un projet basé sur la détection d'objets ou de sons.",
+                            "Sensibilisation à l'éthique et à l'avenir de l'IA pour les jeunes.",
+                            "Démonstration pratique de son premier prototype intelligent."
+                        ]
+                    }
+                }
+            },
+            {
+                id: "genai-smart",
+                title: "IA Générative pour l'Apprentissage Intelligent",
+                category: "ai",
+                icon: "fa-brain",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "On s'occupe de tout, il te suffit d'apporter ton PC !",
+                target: "Étudiants et élèves souhaitant utiliser l'IA comme levier d'apprentissage.",
+                teaser: "Développe des compétences pratiques pour utiliser l'IA de manière créative, productive et responsable au quotidien.",
+                techStack: ["Prompt Engineering", "LLM Assistants", "Generative Video", "IA Éthique"],
+                focus: [
+                    "Différence entre IA Forte et IA Faible",
+                    "Maîtrise des prompts pour l'aide aux devoirs et à l'apprentissage",
+                    "Création de contenus textuels et visuels assistés par IA",
+                    "Éthique, esprit critique et sensibilisation aux biais et fake news"
+                ],
+                weeks: {
+                    week1: {
+                        title: "Comprendre l'IA & Fondements",
+                        topics: [
+                            "Histoire de l'Intelligence Artificielle et grands domaines d'application.",
+                            "Différence claire entre IA faible et IA forte.",
+                            "Introduction aux mécanismes d'apprentissage des machines.",
+                            "Prise en main éthique et sécurisée des premiers outils interactifs."
+                        ]
+                    },
+                    week2: {
+                        title: "Productivité & Créativité assistée",
+                        topics: [
+                            "Utilisation de l'IA pour synthétiser, apprendre et chercher de l'information.",
+                            "Techniques avancées de Prompt Engineering pour l'apprentissage.",
+                            "Génération de médias créatifs (textes, images, petites vidéos).",
+                            "Développement de l'esprit critique face aux hallucinations de l'IA."
+                        ]
+                    },
+                    week3: {
+                        title: "Projet Pratique Intégré",
+                        topics: [
+                            "Conception d'un projet éducatif ou créatif complet intégrant plusieurs IA.",
+                            "Présentation du cas d'usage (ex. assistant d'apprentissage ou BD illustrée).",
+                            "Débats sur l'impact de l'IA sur l'éducation et la société de demain."
+                        ]
+                    }
+                }
+            },
+            {
+                id: "intro-ai",
+                title: "Introduction à l'Intelligence Artificielle",
+                category: "ai",
+                icon: "fa-chart-line",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "On s'occupe de tout, il te suffit d'apporter ton PC !",
+                target: "Lycéens et étudiants voulant entamer un cursus solide en Data Science.",
+                teaser: "Apprends les bases de Python et de l'intelligence artificielle. Découvre le Machine Learning et les réseaux de neurones.",
+                techStack: ["Python", "Scikit-Learn", "Machine Learning", "Neural Networks"],
+                focus: [
+                    "Bases solides de développement en langage Python",
+                    "Concepts de Machine Learning, Deep Learning et réseaux de neurones",
+                    "Entraînement de modèles d'IA prédictive",
+                    "Création et évaluation de performances de modèles mathématiques"
+                ],
+                weeks: {
+                    week1: {
+                        title: "Introduction à l'IA & Python",
+                        topics: [
+                            "Découverte de l'IA, du Machine Learning et du Deep Learning.",
+                            "Applications concrètes dans les industries modernes.",
+                            "Initiation à la syntaxe Python : variables, types de données.",
+                            "Manipulation de structures de données simples et création de fonctions."
+                        ]
+                    },
+                    week2: {
+                        title: "Algorithmes de Machine Learning",
+                        topics: [
+                            "Introduction au Machine Learning supervisé et non supervisé.",
+                            "Utilisation de bibliothèques majeures comme Scikit-Learn.",
+                            "Entraînement de premiers modèles de classification et de régression.",
+                            "Compréhension des phases d'évaluation (train/test split)."
+                        ]
+                    },
+                    week3: {
+                        title: "Réseaux de Neurones & Mini-Projet",
+                        topics: [
+                            "Principes des réseaux de neurones artificiels.",
+                            "Découverte de l'apprentissage profond (Deep Learning) pour la reconnaissance.",
+                            "Création et entraînement d'un modèle final de prédiction.",
+                            "Interprétation des résultats et présentation des performances."
+                        ]
+                    }
+                }
+            },
+            {
+                id: "python",
+                title: "Programmation avec Python",
+                category: "code",
+                icon: "fa-code",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "Ne t'en fais pas, on a tout ce qu'il faut, apporte juste ton PC !",
+                target: "Toute personne désirant acquérir le socle de base du codage informatique universel.",
+                teaser: "Acquiers de solides compétences en algorithmique Python, bases de données SQL, traitement de données et Machine Learning.",
+                techStack: ["Python 3", "SQL / SQLite", "Pandas", "NumPy", "Matplotlib"],
+                focus: [
+                    "Maîtriser la syntaxe Python : listes, dictionnaires, ensembles",
+                    "Apprendre à structurer son code avec la Programmation Orientée Objet (POO)",
+                    "Manipuler et requêter des bases de données relationnelles SQL",
+                    "Analyser et visualiser de la donnée réelle"
+                ],
+                weeks: {
+                    week1: {
+                        title: "Bases de Python & Algorithmique",
+                        topics: [
+                            "Installation de l'environnement, syntaxe de base, indentation.",
+                            "Maîtrise des structures de données : listes, tuples, dictionnaires, ensembles.",
+                            "Écriture de boucles, de conditions et de fonctions réutilisables.",
+                            "Gestion des modules et imports de bibliothèques externes."
+                        ]
+                    },
+                    week2: {
+                        title: "POO & Bases de données SQL",
+                        topics: [
+                            "Introduction à la programmation orientée objet (classes, objets, méthodes).",
+                            "Bases de données relationnelles : requêtes SQL (SELECT, JOIN, WHERE).",
+                            "Connexion et échange de données entre un programme Python et une base SQL.",
+                            "Gestion des fichiers (fichiers texte et CSV)."
+                        ]
+                    },
+                    week3: {
+                        title: "Analyse, Visualisation & ML de base",
+                        topics: [
+                            "Manipulation de données avec NumPy et Pandas.",
+                            "Création de graphiques explicites avec Matplotlib / Seaborn.",
+                            "Introduction aux algorithmes d'apprentissage automatique de base.",
+                            "Création d'un projet final d'analyse de données réelles."
+                        ]
+                    }
+                }
+            },
+            {
+                id: "socialmedia",
+                title: "Gestion des Réseaux Sociaux",
+                category: "creative",
+                icon: "fa-hashtag",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "On s'occupe de tout, il te suffit d'apporter ton PC !",
+                target: "Jeunes créateurs, influenceurs en herbe ou futurs digital marketers.",
+                teaser: "Explore le marketing digital, maîtrise la création de contenu et prépare-toi aux certifications HubSpot et Google.",
+                focus: [
+                    "Comprendre la différence entre marketing classique et digital",
+                    "Concevoir une stratégie de Content Marketing adaptée aux plateformes",
+                    "Planifier, créer et publier du contenu visuel engageant (Canva, etc.)",
+                    "Analyser l'impact des campagnes et maîtriser les indicateurs de performance (KPIs)"
+                ],
+                techStack: ["Canva", "Copywriting", "HubSpot", "Google Marketing", "Algorithms"],
+                weeks: {
+                    week1: {
+                        title: "Fondamentaux & Gestion de contenu",
+                        topics: [
+                            "Distinction entre marketing traditionnel et marketing digital.",
+                            "Sélection et rôles des différentes plateformes sociales (Instagram, TikTok, YouTube).",
+                            "Définition des indicateurs de performance (KPIs).",
+                            "Apprentissage du Marketing de Contenu (Content Marketing).",
+                            "Adaptation des types de formats de contenus par réseau."
+                        ]
+                    },
+                    week2: {
+                        title: "Création Visuelle & Planification",
+                        topics: [
+                            "Utilisation d'outils créatifs pour concevoir des visuels accrocheurs.",
+                            "Planification éditoriale : calendriers de publication, automatisation.",
+                            "Techniques d'écriture de légendes (Copywriting) pour réseaux sociaux.",
+                            "Introduction aux bases de l'algorithme des différents réseaux."
+                        ]
+                    },
+                    week3: {
+                        title: "Stratégie de Campagnes & Certifications",
+                        topics: [
+                            "Lancement et pilotage d'une stratégie de campagne organique.",
+                            "Introduction à la publicité payante et ciblage d'audience.",
+                            "Préparation guidée aux certifications reconnues de HubSpot et Google.",
+                            "Soutenance d'une stratégie de marque en équipe."
+                        ]
+                    }
+                }
+            },
+            {
+                id: "webdev",
+                title: "Introduction au Développement Web",
+                category: "code",
+                icon: "fa-laptop-code",
+                duration: "3 semaines - 48 heures",
+                price: "600 TND",
+                requirements: "On s'occupe de tout, il te suffit d'apporter ton PC !",
+                target: "Ceux qui veulent apprendre à construire des sites de A à Z.",
+                teaser: "Découvrez les fondamentaux du Web en maîtrisant HTML, CSS et JavaScript pour créer votre premier site web interactif.",
+                techStack: ["HTML5", "CSS3 / Flexbox", "JavaScript (ES6)", "Git & GitHub", "GitHub Pages"],
+                focus: [
+                    "Comprendre le fonctionnement d'Internet, du Web et des APIs",
+                    "Structurer des pages Web modernes en utilisant HTML5",
+                    "Styler et concevoir des mises en page responsive avec CSS3 (Flexbox)",
+                    "Ajouter de l'interactivité dynamique grâce au langage JavaScript"
+                ],
+                weeks: {
+                    week1: {
+                        title: "Fondamentaux du Web & Git",
+                        topics: [
+                            "Explication de la différence entre Internet et le Web.",
+                            "Compréhension des protocoles, des requêtes HTTP et des APIs.",
+                            "Prise en main de Git et de la plateforme GitHub pour la gestion de projet.",
+                            "Premiers pas avec HTML : balises, structures et zonage de page."
+                        ]
+                    },
+                    week2: {
+                        title: "Stylisation & CSS3 Avancé",
+                        topics: [
+                            "Introduction à CSS : sélecteurs, propriétés de couleur, polices.",
+                            "Maîtrise du Box Model (marges, bordures, espacements).",
+                            "Création de mises en page flexibles avec Flexbox.",
+                            "Conception adaptative (responsive design) pour écrans mobiles."
+                        ]
+                    },
+                    week3: {
+                        title: "Interactivité JavaScript & Déploiement",
+                        topics: [
+                            "Introduction à JavaScript : variables, conditions, fonctions.",
+                            "Manipulation dynamique de l'affichage HTML (le DOM).",
+                            "Gestion des événements utilisateur (clics de boutons, formulaires).",
+                            "Hébergement et déploiement final en direct sur GitHub Pages."
+                        ]
+                    }
+                }
+            }
+        ];
+
+        // --- MOTEUR DE PRESENTATION / SLIDES (STRUCTURE PPT) ---
+        // Nous générons un deck de 20 slides :
+        // Slide 0 : Slide d'introduction GOMYCODE Summer Academy
+        // Slide 1 à 18 : 2 slides par cours (Slide A : Aperçu / Slide B : Programme complet)
+        // Slide 19 : Slide de fin & Inscriptions
+        let slidesDeck = [];
+        
+        function buildSlidesDeck() {
+            slidesDeck = [];
+            
+            // Slide 0: Accueil
+            slidesDeck.push({
+                type: "welcome",
+                title: "Summer Academy 2026",
+                subtitle: "LE CAMP D'ÉTÉ D'UNE VIE",
+                teaser: "Découvrez une expérience d'apprentissage hors du commun pour les jeunes passionnés de technologie, d'intelligence artificielle, de codage et de création digitale."
+            });
+
+            // Pour chaque cours, nous créons 2 slides
+            coursesData.forEach(course => {
+                // Slide Info & Stack
+                slidesDeck.push({
+                    type: "course-info",
+                    course: course,
+                    title: course.title,
+                    subtitle: "Aperçu & Technologies enseignées"
+                });
+                // Slide Programme Semaines
+                slidesDeck.push({
+                    type: "course-program",
+                    course: course,
+                    title: course.title,
+                    subtitle: "Le Programme Semaine par Semaine"
+                });
+            });
+
+            // Slide finale
+            slidesDeck.push({
+                type: "closing",
+                title: "Rejoignez la Summer Academy",
+                subtitle: "Prêt pour l'inscription ?",
+                teaser: "Nos équipes d'admission et nos mentors vous attendent dans l'ensemble de nos Hackerspaces en Tunisie pour démarrer l'aventure d'une vie."
+            });
+        }
+
+        // Éléments du DOM
+        const coursesGrid = document.getElementById('courses-grid');
+        const slideCourseSelector = document.getElementById('slide-course-selector');
+        const activeSlideContent = document.getElementById('active-slide-content');
+        const currentSlideIndexSpan = document.getElementById('current-slide-index');
+        const totalSlidesCountSpan = document.getElementById('total-slides-count');
+        const compare1 = document.getElementById('compare-1');
+        const compare2 = document.getElementById('compare-2');
+        const compare3 = document.getElementById('compare-3');
+        const compareHeaders = document.getElementById('compare-headers');
+        const compareBody = document.getElementById('compare-body');
+
+        let currentSlide = 0;
+
+        // --- ALGORITHME DU QUIZ D'ORIENTATION ---
+        let quizStep = 0;
+        let quizAnswers = {
+            age: "",
+            interests: [],
+            career: "",
+            activity: ""
+        };
+
+        const quizQuestions = [
+            {
+                key: "age",
+                title: "Quel est l'âge de l'élève ?",
+                type: "single",
+                options: [
+                    { label: "8 à 11 ans", value: "kids" },
+                    { label: "12 à 15 ans", value: "teen" },
+                    { label: "16 ans et plus", value: "young" }
+                ]
+            },
+            {
+                key: "interests",
+                title: "Quels sujets éveillent le plus sa curiosité ?",
+                type: "multiple",
+                options: [
+                    { label: "Créer des jeux vidéo et des animations", value: "gaming" },
+                    { label: "Comprendre et utiliser Chat GPT, Midjourney, l'IA", value: "ai" },
+                    { label: "Résoudre des énigmes, protéger des données, hacker éthique", value: "cyber" },
+                    { label: "Construire des sites web et des applications", value: "web" },
+                    { label: "Faire des montages photos, vidéos et gérer des réseaux", value: "marketing" }
+                ]
+            },
+            {
+                key: "career",
+                title: "Quel serait son métier de rêve ?",
+                type: "single",
+                options: [
+                    { label: "Développeur de Jeux ou Game Designer", value: "gaming" },
+                    { label: "Ingénieur en Intelligence Artificielle / Data Scientist", value: "ai" },
+                    { label: "Expert en Sécurité Informatique / Consultant", value: "cyber" },
+                    { label: "Créateur de site web ou d'applications mobiles", value: "web" },
+                    { label: "Digital Marketeur, Influenceur ou Social Media Manager", value: "marketing" }
+                ]
+            },
+            {
+                key: "activity",
+                title: "Dans ses temps libres, que préfère-t-il ?",
+                type: "single",
+                options: [
+                    { label: "Jouer aux jeux vidéo et explorer de nouvelles applications", value: "gaming" },
+                    { label: "Créer, dessiner, monter de petites vidéos", value: "marketing" },
+                    { label: "Résoudre des puzzles complexes et comprendre comment fonctionnent les choses", value: "cyber" },
+                    { label: "Écrire du code, automatiser des petites tâches", value: "web" }
+                ]
+            }
+        ];
+
+        // --- INITIALISATION ---
+        window.onload = function() {
+            buildSlidesDeck();
+            renderOverview();
+            setupSelectors();
+            renderSlide();
+            renderComparison();
+            resetQuiz();
+            updateInvoice();
+            
+            // Écouteurs d'événements clavier pour les slides
+            document.addEventListener('keydown', function(e) {
+                if (document.getElementById('view-slides').classList.contains('hidden')) return;
+                if (e.key === 'ArrowRight' || e.key === 'Space') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+        };
+
+        // Rendu de la vue d'ensemble (Grille de cartes)
+        function renderOverview(category = "all") {
+            coursesGrid.innerHTML = '';
+            const filtered = category === "all" ? coursesData : coursesData.filter(c => c.category === category);
+            
+            filtered.forEach((course) => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 rounded-3xl p-6 hover:border-red-500/50 transition-all flex flex-col justify-between group shadow-lg";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="h-12 w-12 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20 group-hover:bg-red-500/20 transition-all">
+                                <i class="fa-solid ${course.icon} text-xl text-red-500"></i>
+                            </div>
+                            <span class="text-[10px] font-black tracking-widest text-slate-400 bg-slate-950 px-3 py-1.5 rounded-full border border-slate-800 uppercase">
+                                48 HEURES
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-white mb-2 group-hover:text-red-400 transition-colors">${course.title}</h3>
+                        <p class="text-slate-400 text-xs md:text-sm mb-4 line-clamp-2 leading-relaxed">${course.teaser}</p>
+                        
+                        <!-- Mini Badges de compétences -->
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            ${course.techStack.map(tech => `
+                                <span class="bg-slate-950 text-slate-300 text-[10px] font-semibold px-2 py-1 rounded-md border border-slate-800/80">${tech}</span>
+                            `).join('')}
+                        </div>
+
+                        <div class="space-y-1.5 mb-6 border-t border-slate-850 pt-3">
+                            <div class="flex items-center gap-2 text-xs text-slate-300">
+                                <i class="fa-solid fa-clock text-red-500 w-4"></i>
+                                <span><strong>Durée :</strong> ${course.duration}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-300">
+                                <i class="fa-solid fa-tags text-red-500 w-4"></i>
+                                <span><strong>Tarif :</strong> ${course.price}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openModal('${course.id}')" class="flex-1 bg-slate-850 hover:bg-slate-850/80 text-white text-xs font-bold py-3 rounded-xl transition-all border border-slate-750">
+                            <i class="fa-solid fa-eye mr-1"></i> Consulter
+                        </button>
+                        <button onclick="startPresentationAt('${course.id}')" class="bg-gomycode-red hover-gomycode-red text-white text-xs font-bold px-4 py-3 rounded-xl transition-all" title="Lancer la présentation">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                    </div>
+                `;
+                coursesGrid.appendChild(card);
+            });
+        }
+
+        function filterCourses(category) {
+            // Activer le bon bouton de filtre
+            document.querySelectorAll('.category-filter-btn').forEach(btn => {
+                btn.className = "category-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all bg-slate-800 text-slate-300 hover:bg-slate-700";
+            });
+            document.getElementById(`filter-${category}`).className = "category-filter-btn px-4 py-2 rounded-full text-xs font-bold transition-all bg-gomycode-red text-white";
+            
+            renderOverview(category);
+        }
+
+        // Configurer les menus déroulants de sélection
+        function setupSelectors() {
+            // Sélecteur de slide rapide
+            slideCourseSelector.innerHTML = '';
+            slidesDeck.forEach((slide, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                if (slide.type === 'welcome') {
+                    opt.textContent = `🎯 Accueil de la présentation`;
+                } else if (slide.type === 'closing') {
+                    opt.textContent = `🏁 Fin de la présentation`;
+                } else if (slide.type === 'course-info') {
+                    opt.textContent = `📖 Aperçu : ${slide.title}`;
+                } else if (slide.type === 'course-program') {
+                    opt.textContent = `📅 Planning : ${slide.title}`;
+                }
+                slideCourseSelector.appendChild(opt);
+            });
+
+            // Sélecteurs de comparaison
+            const selectors = [compare1, compare2, compare3];
+            selectors.forEach((select, selectIdx) => {
+                select.innerHTML = selectIdx === 2 ? '<option value="">-- Aucun --</option>' : '';
+                coursesData.forEach((c, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.title;
+                    if (selectIdx === 0 && idx === 1) opt.selected = true; // Par défaut Cybersec
+                    if (selectIdx === 1 && idx === 8) opt.selected = true; // Par défaut Web Dev
+                    select.appendChild(opt);
+                });
+            });
+
+            // Sélecteur de Devis
+            const invoiceSelector = document.getElementById('invoice-course-selector');
+            invoiceSelector.innerHTML = '';
+            coursesData.forEach((c) => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.textContent = c.title;
+                invoiceSelector.appendChild(opt);
+            });
+        }
+
+        // Changement d'onglet
+        function switchView(viewName) {
+            const views = ['overview', 'slides', 'quiz', 'compare', 'invoice'];
+            views.forEach((v) => {
+                document.getElementById(`view-${v}`).classList.add('hidden');
+                document.getElementById(`nav-${v}`).className = "px-4 py-2 rounded-full text-xs md:text-sm font-semibold text-slate-300 hover:text-white transition-all";
+            });
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            document.getElementById(`nav-${viewName}`).className = "px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all bg-gomycode-red text-white shadow-md";
+            
+            if (viewName === 'slides') {
+                renderSlide();
+            }
+        }
+
+        // --- NAVIGATION DES SLIDES ---
+        function startPresentationAt(courseId) {
+            // Trouver la slide de type course-info pour ce cours
+            const idx = slidesDeck.findIndex(s => s.course && s.course.id === courseId && s.type === 'course-info');
+            if (idx !== -1) {
+                currentSlide = idx;
+                switchView('slides');
+            }
+        }
+
+        function jumpToSlide(idx) {
+            currentSlide = parseInt(idx);
+            renderSlide();
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                renderSlide();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < slidesDeck.length - 1) {
+                currentSlide++;
+                renderSlide();
+            }
+        }
+
+        function renderSlide() {
+            const slide = slidesDeck[currentSlide];
+            slideCourseSelector.value = currentSlide;
+            currentSlideIndexSpan.textContent = currentSlide + 1;
+            totalSlidesCountSpan.textContent = slidesDeck.length;
+
+            if (slide.type === "welcome") {
+                // SLIDE D'ACCUEIL
+                activeSlideContent.innerHTML = `
+                    <div class="flex-1 flex flex-col justify-center items-center text-center space-y-6">
+                        <div class="bg-red-500/10 text-red-500 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-red-500/20">
+                            GOMYCODE SUMMER ACADEMY
+                        </div>
+                        <h1 class="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight">
+                            LE CAMP D'ÉTÉ <br><span class="text-red-500">D'UNE VIE !</span>
+                        </h1>
+                        <p class="text-slate-400 text-sm md:text-base max-w-2xl leading-relaxed">
+                            3 semaines de fun, de découverte et de création intensive. Préparez la prochaine génération aux compétences clés du digital.
+                        </p>
+                        <div class="flex justify-center items-center gap-8 text-slate-300 font-extrabold text-xs md:text-sm border-t border-slate-800 pt-6 w-full max-w-lg">
+                            <div><i class="fa-solid fa-clock text-red-500 mr-2"></i>48h de formation</div>
+                            <div class="h-4 w-[1px] bg-slate-700"></div>
+                            <div><i class="fa-solid fa-tags text-red-500 mr-2"></i>600 TND</div>
+                            <div class="h-4 w-[1px] bg-slate-700"></div>
+                            <div><i class="fa-solid fa-laptop text-red-500 mr-2"></i>Mentors dédiés</div>
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === "closing") {
+                // SLIDE DE CLÔTURE
+                activeSlideContent.innerHTML = `
+                    <div class="flex-1 flex flex-col justify-center items-center text-center space-y-6">
+                        <div class="bg-red-500/10 text-red-500 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-red-500/20">
+                            INSCRIPTION OUVERTE
+                        </div>
+                        <h1 class="text-3xl md:text-5xl font-black text-white leading-tight">
+                            Prêt à lancer <br><span class="text-red-500">votre parcours ?</span>
+                        </h1>
+                        <p class="text-slate-400 text-sm md:text-base max-w-xl">
+                            Nos équipes d'admission et de mentors vous accueillent pour formaliser l'inscription de l'élève. Préparez un avenir exceptionnel dès aujourd'hui.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md w-full pt-4">
+                            <div class="bg-slate-950/40 border border-slate-800 p-4 rounded-xl flex items-center gap-3 text-left">
+                                <i class="fa-solid fa-location-dot text-red-500 text-xl"></i>
+                                <div>
+                                    <span class="text-xs text-slate-500 block">Où s'inscrire</span>
+                                    <span class="font-bold text-white text-xs">Nos Hackerspaces en Tunisie</span>
+                                </div>
+                            </div>
+                            <div class="bg-slate-950/40 border border-slate-800 p-4 rounded-xl flex items-center gap-3 text-left">
+                                <i class="fa-solid fa-laptop-code text-red-500 text-xl"></i>
+                                <div>
+                                    <span class="text-xs text-slate-500 block">Matériel requis</span>
+                                    <span class="font-bold text-white text-xs">Un simple ordinateur portable</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === "course-info") {
+                // SLIDE A : INFO DU COURS
+                const course = slide.course;
+                activeSlideContent.innerHTML = `
+                    <div class="flex items-start justify-between border-b border-slate-800/80 pb-4">
+                        <div>
+                            <span class="text-red-500 font-extrabold tracking-widest text-xs uppercase">FICHE FORMATION</span>
+                            <h2 class="text-2xl md:text-3xl font-black text-white mt-1 flex items-center gap-3">
+                                <i class="fa-solid ${course.icon} text-red-500"></i>
+                                ${course.title}
+                            </h2>
+                        </div>
+                        <div class="text-right">
+                            <span class="block text-xl font-extrabold text-red-500">${course.price}</span>
+                            <span class="text-slate-500 text-xs font-semibold">${course.duration}</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 my-6 flex-1 items-center">
+                        <div class="lg:col-span-6 space-y-4">
+                            <div class="bg-slate-950/40 border border-slate-800/60 p-5 rounded-2xl">
+                                <h3 class="text-xs font-bold uppercase text-slate-500 mb-2"><i class="fa-solid fa-quote-left text-red-500/60 mr-1.5"></i>Aperçu de la formation</h3>
+                                <p class="text-slate-300 text-xs md:text-sm leading-relaxed">${course.teaser}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-xs font-bold uppercase text-slate-500 mb-2">Technologies & Outils</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    ${course.techStack.map(tech => `
+                                        <span class="bg-slate-950 border border-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-2">
+                                            <i class="fa-solid fa-microchip text-red-500 text-[10px]"></i> ${tech}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-6 space-y-3">
+                            <h3 class="text-xs font-bold uppercase text-slate-500"><i class="fa-solid fa-star text-red-500 mr-1.5"></i>Compétences ciblées</h3>
+                            <div class="grid grid-cols-1 gap-2">
+                                ${course.focus.map(f => `
+                                    <div class="flex items-start gap-2.5 text-xs text-slate-300 bg-slate-950/20 p-3 rounded-xl border border-slate-850">
+                                        <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>
+                                        <span>${f}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800/80 pt-4 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-400 gap-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-user-circle text-red-500"></i>
+                            <span><strong>Cible :</strong> ${course.target}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-laptop text-red-500"></i>
+                            <span><strong>Prérequis :</strong> ${course.requirements}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === "course-program") {
+                // SLIDE B : PROGRAMME SEMAINE PAR SEMAINE
+                const course = slide.course;
+                activeSlideContent.innerHTML = `
+                    <div class="flex items-start justify-between border-b border-slate-800/80 pb-4">
+                        <div>
+                            <span class="text-red-500 font-extrabold tracking-widest text-xs uppercase">Syllabus de formation</span>
+                            <h2 class="text-2xl md:text-3xl font-black text-white mt-1 flex items-center gap-3">
+                                <i class="fa-solid ${course.icon} text-red-500"></i>
+                                ${course.title}
+                            </h2>
+                        </div>
+                        <span class="text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-full border border-slate-800 font-bold uppercase">
+                            Planification
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6 flex-1">
+                        <!-- Semaine 1 -->
+                        <div class="bg-slate-950/40 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="text-[10px] font-black text-red-500 uppercase tracking-widest block mb-1">Semaine 1</span>
+                                <h4 class="text-sm font-bold text-white mb-3 border-b border-slate-800 pb-2">${course.weeks.week1.title}</h4>
+                                <ul class="space-y-2">
+                                    ${course.weeks.week1.topics.map(t => `
+                                        <li class="text-xs text-slate-300 flex items-start gap-1.5 leading-relaxed">
+                                            <span class="text-red-500 font-black">•</span>
+                                            <span>${t}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Semaine 2 -->
+                        <div class="bg-slate-950/40 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="text-[10px] font-black text-red-500 uppercase tracking-widest block mb-1">Semaine 2</span>
+                                <h4 class="text-sm font-bold text-white mb-3 border-b border-slate-800 pb-2">${course.weeks.week2.title}</h4>
+                                <ul class="space-y-2">
+                                    ${course.weeks.week2.topics.map(t => `
+                                        <li class="text-xs text-slate-300 flex items-start gap-1.5 leading-relaxed">
+                                            <span class="text-red-500 font-black">•</span>
+                                            <span>${t}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Semaine 3 -->
+                        <div class="bg-slate-950/40 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="text-[10px] font-black text-red-500 uppercase tracking-widest block mb-1">Semaine 3</span>
+                                <h4 class="text-sm font-bold text-white mb-3 border-b border-slate-800 pb-2">${course.weeks.week3.title}</h4>
+                                <ul class="space-y-2">
+                                    ${course.weeks.week3.topics.map(t => `
+                                        <li class="text-xs text-slate-300 flex items-start gap-1.5 leading-relaxed">
+                                            <span class="text-red-500 font-black">•</span>
+                                            <span>${t}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800/80 pt-4 flex justify-between items-center text-[11px] text-slate-400">
+                        <span>Rejoignez la Summer Academy GOMYCODE</span>
+                        <span>Fait partie du programme d'été d'admission</span>
+                    </div>
+                `;
+            }
+        }
+
+        function toggleFullscreen() {
+            const elem = document.getElementById('active-slide-content');
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    showToast(`Erreur plein écran : ${err.message}`, "error");
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // --- GESTION DES NOTIFICATIONS ---
+        function showToast(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-2 px-4 py-3 rounded-xl shadow-xl border text-xs font-bold transition-all duration-300 transform translate-y-5 opacity-0 ${
+                type === "error" ? "bg-red-900 border-red-700 text-red-200" : "bg-slate-900 border-slate-750 text-emerald-400"
+            }`;
+            toast.innerHTML = `
+                <i class="fa-solid ${type === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-check'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            
+            // Animation entrée
+            setTimeout(() => {
+                toast.classList.remove('translate-y-5', 'opacity-0');
+            }, 50);
+
+            // Animation sortie
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-5');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // --- GESTION DU QUIZ D'ORIENTATION ---
+        function resetQuiz() {
+            quizStep = 0;
+            quizAnswers = { age: "", interests: [], career: "", activity: "" };
+            renderQuizStep();
+        }
+
+        function selectQuizOption(value) {
+            const currentQuestion = quizQuestions[quizStep];
+            if (currentQuestion.type === "single") {
+                quizAnswers[currentQuestion.key] = value;
+                nextQuizStep();
+            } else {
+                // Multiple selection
+                const idx = quizAnswers[currentQuestion.key].indexOf(value);
+                if (idx > -1) {
+                    quizAnswers[currentQuestion.key].splice(idx, 1);
+                } else {
+                    quizAnswers[currentQuestion.key].push(value);
+                }
+                renderQuizStep();
+            }
+        }
+
+        function nextQuizStep() {
+            if (quizStep < quizQuestions.length - 1) {
+                quizStep++;
+                renderQuizStep();
+            } else {
+                calculateQuizResults();
+            }
+        }
+
+        function prevQuizStep() {
+            if (quizStep > 0) {
+                quizStep--;
+                renderQuizStep();
+            }
+        }
+
+        function renderQuizStep() {
+            const currentQuestion = quizQuestions[quizStep];
+            const quizCard = document.getElementById('quiz-card');
+
+            let optionsHtml = '';
+            currentQuestion.options.forEach(opt => {
+                const isSelected = currentQuestion.type === "single" 
+                    ? quizAnswers[currentQuestion.key] === opt.value
+                    : quizAnswers[currentQuestion.key].includes(opt.value);
+
+                optionsHtml += `
+                    <button onclick="selectQuizOption('${opt.value}')" class="w-full text-left p-4 rounded-xl border transition-all text-xs md:text-sm flex items-center justify-between ${
+                        isSelected 
+                            ? 'bg-red-500/10 border-red-500 text-white font-bold' 
+                            : 'bg-slate-950/45 border-slate-800 text-slate-300 hover:border-slate-700'
+                    }">
+                        <span>${opt.label}</span>
+                        ${isSelected ? '<i class="fa-solid fa-circle-check text-red-500"></i>' : '<i class="fa-regular fa-circle text-slate-700"></i>'}
+                    </button>
+                `;
+            });
+
+            quizCard.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Progress bar -->
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-gomycode-red h-full" style="width: ${((quizStep + 1) / quizQuestions.length) * 100}%"></div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <span class="text-xs text-red-500 font-extrabold uppercase tracking-wider">Question ${quizStep + 1} sur ${quizQuestions.length}</span>
+                        <h3 class="text-xl font-bold text-white">${currentQuestion.title}</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3">
+                        ${optionsHtml}
+                    </div>
+
+                    <div class="flex justify-between items-center border-t border-slate-800 pt-6">
+                        <button onclick="prevQuizStep()" ${quizStep === 0 ? 'disabled' : ''} class="px-4 py-2 text-xs text-slate-400 hover:text-white disabled:opacity-30 disabled:pointer-events-none">
+                            <i class="fa-solid fa-arrow-left mr-1.5"></i>Retour
+                        </button>
+                        ${currentQuestion.type === "multiple" ? `
+                            <button onclick="nextQuizStep()" class="bg-gomycode-red hover-gomycode-red text-white px-6 py-2 rounded-lg text-xs font-bold transition-all shadow-md">
+                                Continuer <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function calculateQuizResults() {
+            // Algorithme de calcul de match de cours
+            // Pour chaque cours, nous allons calculer un score d'adéquation basé sur les réponses du quiz.
+            const matches = coursesData.map(course => {
+                let score = 0;
+
+                // 1. Âge d'adéquation
+                if (quizAnswers.age === "kids") {
+                    if (course.id === "kids-coding") score += 50; // Très recommandé
+                    else if (course.id === "gamedev") score += 30;
+                    else score -= 10;
+                } else if (quizAnswers.age === "teen") {
+                    if (course.id === "kids-coding") score -= 20; // Trop grand
+                    else score += 30; // Tout est accessible
+                } else if (quizAnswers.age === "young") {
+                    if (course.id === "kids-coding") score -= 40;
+                    if (["intro-ai", "python", "cybersecurity", "webdev"].includes(course.id)) score += 40;
+                }
+
+                // 2. Intérêts
+                quizAnswers.interests.forEach(interest => {
+                    if (interest === "gaming" && ["gamedev", "kids-coding"].includes(course.id)) score += 30;
+                    if (interest === "ai" && ["intro-ai", "genai-newgen", "genai-smart"].includes(course.id)) score += 30;
+                    if (interest === "cyber" && course.id === "cybersecurity") score += 40;
+                    if (interest === "web" && course.id === "webdev") score += 40;
+                    if (interest === "marketing" && course.id === "socialmedia") score += 45;
+                });
+
+                // 3. Projet d'avenir
+                if (quizAnswers.career === "gaming" && ["gamedev", "kids-coding"].includes(course.id)) score += 30;
+                if (quizAnswers.career === "ai" && ["intro-ai", "genai-newgen", "genai-smart"].includes(course.id)) score += 30;
+                if (quizAnswers.career === "cyber" && course.id === "cybersecurity") score += 30;
+                if (quizAnswers.career === "web" && course.id === "webdev") score += 30;
+                if (quizAnswers.career === "marketing" && course.id === "socialmedia") score += 30;
+
+                // 4. Activités
+                if (quizAnswers.activity === "gaming" && ["gamedev", "kids-coding"].includes(course.id)) score += 20;
+                if (quizAnswers.activity === "marketing" && course.id === "socialmedia") score += 20;
+                if (quizAnswers.activity === "cyber" && course.id === "cybersecurity") score += 20;
+                if (quizAnswers.activity === "web" && course.id === "webdev") score += 20;
+
+                // Normaliser le score en pourcentage (min 10%, max 98%)
+                const finalPercentage = Math.min(Math.max(Math.round((score / 150) * 100), 10), 98);
+
+                return {
+                    course: course,
+                    score: finalPercentage
+                };
+            });
+
+            // Trier par score décroissant
+            matches.sort((a, b) => b.score - a.score);
+
+            const quizCard = document.getElementById('quiz-card');
+            
+            quizCard.innerHTML = `
+                <div class="space-y-6">
+                    <div class="text-center space-y-2">
+                        <i class="fa-solid fa-trophy text-red-500 text-4xl mb-2"></i>
+                        <h3 class="text-xl font-bold text-white">Vos Recommandations GOMYCODE</h3>
+                        <p class="text-slate-400 text-xs md:text-sm">Voici les 3 formations les mieux adaptées au profil analysé :</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        ${matches.slice(0, 3).map((match, idx) => `
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-10 w-10 bg-red-500/10 rounded-lg flex items-center justify-center text-red-500 border border-red-500/20">
+                                        <i class="fa-solid ${match.course.icon} text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-sm">${match.course.title}</h4>
+                                        <p class="text-slate-400 text-xs line-clamp-1">${match.course.teaser}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4 w-full md:w-auto justify-between border-t border-slate-800 md:border-0 pt-2 md:pt-0">
+                                    <div class="text-right">
+                                        <span class="text-xs text-slate-500 block">Adéquation</span>
+                                        <strong class="text-emerald-400 text-sm">${match.score}%</strong>
+                                    </div>
+                                    <button onclick="openModal('${match.course.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold">
+                                        Voir Programme
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="flex gap-2 pt-4">
+                        <button onclick="resetQuiz()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl text-xs font-bold border border-slate-700">
+                            Recommencer le test
+                        </button>
+                        <button onclick="switchView('overview')" class="flex-1 bg-gomycode-red hover-gomycode-red text-white py-3 rounded-xl text-xs font-bold shadow-lg">
+                            Parcourir tout le catalogue
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- COMPARAISON DE COURS ---
+        function renderComparison() {
+            const id1 = compare1.value;
+            const id2 = compare2.value;
+            const id3 = compare3.value;
+
+            const selected = [
+                coursesData.find(c => c.id === id1),
+                coursesData.find(c => c.id === id2)
+            ].filter(Boolean);
+
+            if (id3) {
+                const c3 = coursesData.find(c => c.id === id3);
+                if (c3) selected.push(c3);
+            }
+
+            // Headers
+            compareHeaders.innerHTML = '<th class="p-4 text-xs font-bold text-slate-400 uppercase w-48 bg-slate-950/20">Critères</th>';
+            selected.forEach(course => {
+                compareHeaders.innerHTML += `
+                    <th class="p-4">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid ${course.icon} text-red-500"></i>
+                            <span class="font-extrabold text-white text-xs md:text-sm">${course.title}</span>
+                        </div>
+                    </th>
+                `;
+            });
+
+            const rows = [
+                { label: "Description du cours", key: "teaser" },
+                { label: "Durée", key: "duration" },
+                { label: "Tarif", key: "price" },
+                { label: "Prérequis", key: "requirements" },
+                { label: "Stack Technologique", key: "techStack", isArray: true },
+                { label: "Semaine 1 (Détails)", week: "week1" },
+                { label: "Semaine 2 (Détails)", week: "week2" },
+                { label: "Semaine 3 (Détails)", week: "week3" }
+            ];
+
+            compareBody.innerHTML = '';
+            rows.forEach(row => {
+                let rowHtml = `<tr><td class="p-4 font-bold text-slate-400 text-xs bg-slate-950/20 border-r border-slate-800/40">${row.label}</td>`;
+                
+                selected.forEach(course => {
+                    if (row.key) {
+                        if (row.isArray) {
+                            rowHtml += `
+                                <td class="p-4">
+                                    <div class="flex flex-wrap gap-1.5">
+                                        ${course[row.key].map(tech => `
+                                            <span class="bg-slate-950 border border-slate-800 px-2 py-0.5 rounded-md text-[10px] text-slate-300 font-bold">${tech}</span>
+                                        `).join('')}
+                                    </div>
+                                </td>
+                            `;
+                        } else {
+                            rowHtml += `<td class="p-4 text-slate-300 leading-relaxed text-xs md:text-sm">${course[row.key]}</td>`;
+                        }
+                    } else if (row.week) {
+                        const weekData = course.weeks[row.week];
+                        rowHtml += `
+                            <td class="p-4">
+                                <strong class="text-white text-xs block mb-1.5">${weekData.title}</strong>
+                                <ul class="space-y-1 pl-4 list-disc text-slate-400 text-xs leading-relaxed">
+                                    ${weekData.topics.map(t => `<li>${t}</li>`).join('')}
+                                </ul>
+                            </td>
+                        `;
+                    }
+                });
+                
+                rowHtml += '</tr>';
+                compareBody.innerHTML += rowHtml;
+            });
+        }
+
+        // --- DÉTAIL DU COURS MODAL ---
+        function openModal(courseId) {
+            const course = coursesData.find(c => c.id === courseId);
+            if (!course) return;
+
+            document.getElementById('modal-title').innerHTML = `
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid ${course.icon} text-red-500 text-2xl"></i>
+                    <span class="text-lg font-extrabold text-white">${course.title}</span>
+                </div>
+            `;
+
+            document.getElementById('modal-body').innerHTML = `
+                <div>
+                    <h4 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1.5">Description</h4>
+                    <p class="text-slate-300 text-xs md:text-sm leading-relaxed">${course.teaser}</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-850">
+                    <div>
+                        <span class="text-[10px] text-slate-500 uppercase block font-semibold">Durée de la formation</span>
+                        <strong class="text-white text-xs md:text-sm">${course.duration}</strong>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-500 uppercase block font-semibold">Tarif d'inscription</span>
+                        <strong class="text-white text-xs md:text-sm">${course.price}</strong>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2">Technologies & Outils</h4>
+                    <div class="flex flex-wrap gap-1.5">
+                        ${course.techStack.map(tech => `
+                            <span class="bg-slate-950 border border-slate-800 text-slate-300 text-xs px-3 py-1.5 rounded-xl font-bold">${tech}</span>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-1.5">Programme Semaine par Semaine</h4>
+                    
+                    <div class="space-y-2">
+                        <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
+                            <strong class="text-xs text-red-500 uppercase block mb-1">Semaine 1 : ${course.weeks.week1.title}</strong>
+                            <ul class="space-y-1 text-xs text-slate-400 pl-4 list-disc">
+                                ${course.weeks.week1.topics.map(t => `<li>${t}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
+                            <strong class="text-xs text-red-500 uppercase block mb-1">Semaine 2 : ${course.weeks.week2.title}</strong>
+                            <ul class="space-y-1 text-xs text-slate-400 pl-4 list-disc">
+                                ${course.weeks.week2.topics.map(t => `<li>${t}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
+                            <strong class="text-xs text-red-500 uppercase block mb-1">Semaine 3 : ${course.weeks.week3.title}</strong>
+                            <ul class="space-y-1 text-xs text-slate-400 pl-4 list-disc">
+                                ${course.weeks.week3.topics.map(t => `<li>${t}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-800 pt-4 text-xs text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-laptop text-red-500"></i>
+                    <span><strong>Prérequis :</strong> ${course.requirements}</span>
+                </div>
+            `;
+
+            document.getElementById('course-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('course-modal').classList.add('hidden');
+        }
+
+        // --- MISE À JOUR DE LA FICHE D'INSCRIPTION / DEVIS ---
+        function updateInvoice() {
+            const firstName = document.getElementById('invoice-firstname').value || "[Prénom]";
+            const lastName = document.getElementById('invoice-lastname').value || "[Nom]";
+            const courseId = document.getElementById('invoice-course-selector').value;
+            const course = coursesData.find(c => c.id === courseId);
+
+            const printableArea = document.getElementById('invoice-printable');
+            if (!course) return;
+
+            printableArea.innerHTML = `
+                <div class="border-b-2 border-red-500 pb-6 flex justify-between items-start">
+                    <div>
+                        <div class="bg-red-500 text-white px-3 py-1 rounded font-black text-xl tracking-wider inline-block">
+                            GOMYCODE
+                        </div>
+                        <span class="text-xs text-slate-500 block mt-2">Tunis, Tunisie | Hackerspace Network</span>
+                    </div>
+                    <div class="text-right">
+                        <h3 class="text-lg font-extrabold text-slate-900 uppercase">Fiche d'Inscription & Devis</h3>
+                        <p class="text-xs text-slate-500">Date : ${new Date().toLocaleDateString('fr-FR')}</p>
+                        <p class="text-xs text-slate-500">Campagne : Summer Academy 2026</p>
+                    </div>
+                </div>
+
+                <div class="my-6 grid grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <span class="text-slate-500 font-bold block uppercase mb-1">Informations Élève</span>
+                        <strong class="text-slate-900 text-sm block">${firstName} ${lastName}</strong>
+                        <span class="text-slate-500">Candidat Summer Academy</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-slate-500 font-bold block uppercase mb-1">Établissement</span>
+                        <strong class="text-slate-900 text-sm block">GOMYCODE Tunisia</strong>
+                        <span class="text-slate-500">Frais d'études & de sessions d'été</span>
+                    </div>
+                </div>
+
+                <div class="my-6 border border-slate-200 rounded-xl overflow-hidden">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 uppercase font-bold border-b border-slate-200">
+                                <th class="p-3">Formation Sélectionnée</th>
+                                <th class="p-3">Durée / Format</th>
+                                <th class="p-3 text-right">Montant Unique</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-800">
+                            <tr>
+                                <td class="p-3">
+                                    <strong class="text-slate-900 block">${course.title}</strong>
+                                    <span class="text-[10px] text-slate-500 block">${course.teaser}</span>
+                                </td>
+                                <td class="p-3 text-slate-600">${course.duration}</td>
+                                <td class="p-3 text-right font-extrabold text-slate-900">600,000 TND</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex justify-between items-start mt-6 pt-4 border-t border-slate-200">
+                    <div class="text-[10px] text-slate-500 max-w-md">
+                        <p class="font-bold uppercase text-slate-700 mb-1">Conditions de participation</p>
+                        <p>Cette fiche atteste d'une demande d'orientation et de pré-inscription. Le tarif d'inscription inclut un accès complet aux Hackerspaces durant la formation. L'élève doit se prémunir de son propre PC portable.</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-slate-500 text-xs">Total Net à Payer</span>
+                        <h4 class="text-2xl font-black text-slate-900 mt-1">600,000 TND</h4>
+                        <span class="text-[10px] text-slate-400">TVA Non Applicable (Exonéré)</span>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-8 border-t border-dashed border-slate-300 grid grid-cols-2 gap-4 text-center text-xs">
+                    <div>
+                        <span class="text-slate-400 block mb-6">Signature du Parent d'Élève</span>
+                        <div class="h-10 border-b border-slate-300 w-48 mx-auto"></div>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block mb-6">Cachet d'Admission GOMYCODE</span>
+                        <div class="h-10 border-b border-slate-300 w-48 mx-auto"></div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
